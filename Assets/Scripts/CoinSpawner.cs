@@ -4,22 +4,21 @@ using System.Collections.Generic;
 public class CoinSpawner : MonoBehaviour
 {
     [Header("Basics")]
-    public GameObject Coin;          // assign the COIN prefab (not the spawner!)
-    public int count = 15;                 // how many coins
-    public Vector3 areaSize = new Vector3(40f, 0f, 40f); // XZ area centered on this object
-    public float y = 0.5f;                 // height to place coins at
+    public GameObject Coin;          
+    public int count = 15;                 
+    public Vector3 areaSize = new Vector3(40f, 0f, 40f); 
+    public float y = 0.5f;                 
 
     [Header("Simple rules")]
-    public float minSpacing = 1.2f;        // keep coins apart
-    public LayerMask obstacleMask;         // optional: set to your Walls layer (leave 0 to ignore)
+    public float minSpacing = 1.2f;        
+    public LayerMask obstacleMask;         
 
     [Header("Optional")]
-    public bool randomizeColor = true;     // needs Coin.cs on the prefab
-    public Transform parentForCoins;       // keep hierarchy tidy
+    public bool randomizeColor = true;     
+    public Transform parentForCoins;       
 
     void Start()
     {
-        // --- Guard rails (tiny but important) ---
         if (!Coin) { Debug.LogError("[CoinSpawner] Assign coinPrefab."); return; }
         if (Coin.GetComponent<CoinSpawner>())
         {
@@ -27,7 +26,6 @@ public class CoinSpawner : MonoBehaviour
             return;
         }
 
-        // Make sure coin will be visible & collectible
         var col = Coin.GetComponent<Collider>();
         if (col) col.isTrigger = true;
 
@@ -38,24 +36,20 @@ public class CoinSpawner : MonoBehaviour
         {
             attempts++;
 
-            // Random spot in a box on XZ
             Vector3 pos = transform.position + new Vector3(
                 Random.Range(-areaSize.x * 0.5f, areaSize.x * 0.5f),
                 y,
                 Random.Range(-areaSize.z * 0.5f, areaSize.z * 0.5f)
             );
 
-            // Optional: avoid walls/obstacles
             if (obstacleMask.value != 0 && Physics.CheckSphere(pos, 0.35f, obstacleMask))
                 continue;
 
-            // Keep spacing from other coins
             bool ok = true;
             foreach (var p in placed)
                 if ((pos - p).sqrMagnitude < (minSpacing * minSpacing)) { ok = false; break; }
             if (!ok) continue;
 
-            // Spawn
             var go = Instantiate(Coin, pos, Quaternion.identity, parentForCoins);
             go.tag = "Coin";
             if (go.TryGetComponent(out Collider instCol)) instCol.isTrigger = true;
@@ -72,7 +66,6 @@ public class CoinSpawner : MonoBehaviour
             Debug.Log($"[CoinSpawner] Spawned {spawned} coins.");
     }
 
-    // just a simple visual helper
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

@@ -9,14 +9,13 @@ public class Coin : MonoBehaviour
     public CoinColor coinColor;
 
     [Header("Visuals")]
-    [SerializeField] private Renderer targetRenderer; // can be left unassigned
+    [SerializeField] private Renderer targetRenderer; 
 
     static readonly int _ColorId = Shader.PropertyToID("_Color");
     static readonly int _BaseColorId = Shader.PropertyToID("_BaseColor");
 
     void Reset()
     {
-        // ensure trigger + tag
         var col = GetComponent<Collider>();
         if (col) col.isTrigger = true;
         gameObject.tag = "Coin";
@@ -57,15 +56,13 @@ public class Coin : MonoBehaviour
 
         var col = FromCoinColor(coinColor);
 
-        // Prefer MaterialPropertyBlock (no material instantiation in editor)
         var mpb = new MaterialPropertyBlock();
         targetRenderer.GetPropertyBlock(mpb);
         mpb.SetColor(_ColorId, col);
-        mpb.SetColor(_BaseColorId, col); // covers URP/HDRP
+        mpb.SetColor(_BaseColorId, col); 
         targetRenderer.SetPropertyBlock(mpb);
     }
 
-    // Optional helper
     public void RandomizeColor()
     {
         coinColor = (CoinColor)Random.Range(0, 4);

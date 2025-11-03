@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     public float speed = 5.0f;
     private Rigidbody rb;
 
-    // Keep these fields if your GameManager references them
     public TMP_Text scoreText;
     public AudioSource sfxAudioSource;
 
@@ -18,11 +17,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Read input
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical   = Input.GetAxis("Vertical");
 
-        // Get camera-relative directions (ignore Y so movement stays flat)
         Transform cam = Camera.main.transform;
         Vector3 camForward = cam.forward;
         Vector3 camRight   = cam.right;
@@ -31,10 +28,8 @@ public class PlayerController : MonoBehaviour
         camForward.Normalize();
         camRight.Normalize();
 
-        // Combine input with camera direction
         Vector3 moveDir = camForward * moveVertical + camRight * moveHorizontal;
 
-        // Apply force
         rb.AddForce(moveDir * speed, ForceMode.Acceleration);
     }
 
