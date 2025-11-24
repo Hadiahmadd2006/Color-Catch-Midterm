@@ -35,13 +35,26 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Coin"))
-        {
-            Coin coin = other.GetComponent<Coin>();
-            if (coin != null && GameManager.Instance != null)
-                GameManager.Instance.OnCoinCollected(coin);
+        // if (other.CompareTag("Coin"))
+        // {
+        //     Coin coin = other.GetComponent<Coin>();
+        //     if (coin != null && GameManager.Instance != null)
+        //         GameManager.Instance.OnCoinCollected(coin);
 
-            other.gameObject.SetActive(false);
+        //     other.gameObject.SetActive(false);
+        // }
+
+        if (other.gameObject.CompareTag("Door"))
+        {
+            AnimationManager.Instance.ToggleDoor();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Door"))
+        {
+            AnimationManager.Instance.ToggleDoor();
         }
     }
 }
