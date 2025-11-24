@@ -11,12 +11,12 @@ using UnityEngine.InputSystem;
     Debug.LogError("DoorAnimator: no Animator found.");
     }
     // Enforce singleton
-    // if (Instance != null && Instance != this)
-    // {
-    //     Destroy(gameObject);
-    //     return;
-    // }
-    // Instance = this;
+    if (Instance != null && Instance != this)
+    {
+        Destroy(gameObject);
+        return;
+    }
+    Instance = this;
     // If you want this manager to persist across scenes uncomment:
     // DontDestroyOnLoad(gameObject);
     }
